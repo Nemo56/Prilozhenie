@@ -1,74 +1,80 @@
 'use strict';
 
-let numberOfFilms;
 
-function start () {
-    numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
-    while (numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms)) {
-        numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
-    }
-}
-start();
 const personalMovieDB = {
-    count: numberOfFilms,
+    count: 0,
     movies: {},
     actors: {},
     genres: [],
-    privat: false
-};
-
-function rememberMyFilms () {
-    for (let i = 0; i < 2; i++) {
-        const a = prompt('Один из последних просмотренных фильмов?', ''),
-              b = prompt('На сколько оцените его?', '');
-    
-        if (a != null && b != null && a != '' && b != '' && a.length < 50) {
-            personalMovieDB.movies[a] = b;
-            console.log('done');
-        } else {
-            console.log('error');
-            i--;
+    privat: false,
+    start: function () {
+        personalMovieDB.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
+        while (personalMovieDB.count == '' || personalMovieDB.count == null || isNaN(personalMovieDB.count)) {
+            personalMovieDB.count = +prompt('Сколько фильмов вы уже посмотрели?', '');
         }
-    }
-}
+    },
+    rememberMyFilms: function () {
+        for (let i = 0; i < 2; i++) {
+            const a = prompt('Один из последних просмотренных фильмов?', ''),
+                  b = prompt('На сколько оцените его?', '');
+        
+            if (a != null && b != null && a != '' && b != '' && a.length < 50) {
+                personalMovieDB.movies[a] = b;
+                console.log('done');
+            } else {
+                console.log('error');
+                i--;
+            }
+        }
+    },
+    detectPersonalLevel: function () {
+        if (personalMovieDB.count < 10) {
+            console.log("Просмотрено довольно мало фильмов");
+        } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+            console.log("Вы классический зритель");
+        } else if (personalMovieDB.count >= 30) {
+            console.log("Вы киноман");
+        } else {
+            console.log("Произошла ошибка");
+        }
 
-rememberMyFilms();
-
-function detectPersonalLevel () {
-    if (personalMovieDB.count < 10) {
-        console.log("Просмотрено довольно мало фильмов");
-    } else if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
-        console.log("Вы классический зритель");
-    } else if (personalMovieDB.count >= 30) {
-        console.log("Вы киноман");
-    } else {
-        console.log("Произошла ошибка");
-    }
-    
-}
-
-detectPersonalLevel ();
-
-function showMyDB () {
-        if (personalMovieDB.privat == false ) {
+    },
+    showMyDB: function (hidden) {
+        if (!hidden) {
             console.log(personalMovieDB);
         }
-
-}
-
-showMyDB ();
-
-function writeYourGenres () {
-    for (let i = 1; i <= 3; i++) {
-        const a = prompt(`Ваш любимый жанр под номером ${i}`, '');
-        personalMovieDB.genres.push(a) ;
+    },
+    writeYourGenres: function () {
+        for (let i = 1; i <= 3; i++) {
+            const a = prompt(`Ваш любимый жанр под номером ${i}`, '').toLowerCase();
+            
+            if (a == null || a == '') {
+                const a = prompt(`Ваш любимый жанр под номером ${i}`, '').toLowerCase();
+                i--;}
+                else {personalMovieDB.genres.push(a) ;
+            }
+            personalMovieDB.genres.forEach(element => {
+                console.log(`Любимый жанр ${i} это ${personalMovieDB.genres[i-1]}`);});
+        }
+    },
+    toggleVisibleMyDB: function () {
+        if (personalMovieDB.privat) {
+            personalMovieDB.privat = false;
+        }
+        else {
+            personalMovieDB.privat = true;
+        }
     }
-}
+};
 
-writeYourGenres ();
+/*personalMovieDB.rememberMyFilms();
+personalMovieDB.detectPersonalLevel ();
+personalMovieDB.showMyDB ();
+personalMovieDB.writeYourGenres ();
+personalMovieDB.toggleVisibleMyDB ();
 
 
-console.log(personalMovieDB.genres);
+console.log(personalMovieDB.genres);*/
 
 /* 19. callback функции (позволяют запускать функцию сторого после выполнения предыдущей)
 
@@ -299,4 +305,43 @@ john.sayHello();
 //либо делаем так
 const john = Object.create(soldier);  // на этапе создания переменной/объекта даем ему прототип
 */
+
+// 26. Динамическая типизация в JS (изменение типов данных в программе)
+// to string
+// 1)
+console.log (typeof(String(null)));
+console.log (typeof(String(4)));
+
+// 2)
+console.log(typeof(null + ''));
+
+const num = 5;
+
+console.log("https://vk.com/catalog/" + num);
+
+const fontSize = 26 + 'px';
+
+// to number
+
+// 1)
+console.log (typeof(Number('4')));
+
+// 2) унарный плюс
+console.log (typeof(+'4'));
+
+// 3)
+console.log (typeof(parseInt("15px", 10)));
+
+// to boolean
+
+//0, '', null, undefined, Nan; это все ложь
+
+let switcher = null;
+
+if (switcher) {
+    console.log ('Working...');
+}
+
+
+
 
